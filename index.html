@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Game</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai&display=swap');
+
+    html {
+        font-family: 'IBM Plex Sans Thai', sans-serif;
+        background-color: antiquewhite;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #container-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #head {
+        display: flex;
+        /* justify-content: space-between;
+        align-items: center; */
+        padding: 0px 40px 0px 40px;
+    }
+
+    #head-l {
+        flex: 1;
+    }
+
+    #head-r {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    #ans {
+        font-family: 'IBM Plex Sans Thai', sans-serif;
+        width: 60px;
+        height: 70px;
+        font-size: 30px;
+        text-align: center;
+    }
+
+    button {
+        font-family: 'IBM Plex Sans Thai', sans-serif;
+        font-size: 20px;
+        text-align: center;
+        border-radius: 10px;
+        border: none;
+        padding: 10px 20px 10px 20px;
+        background-color: #edb368;
+        color: white;
+    }
+</style>
+
+<body>
+    <div id="head">
+        <div id="head-l">
+            <h1>เกมคณิต</h1>
+        </div>
+        <div id="head-r">
+            <h1>คะแนน &nbsp;</h1>
+            <h1 id="count"> 0 </h1>
+            &nbsp;<h1> / </h1>&nbsp;
+            <h1 id="round"> 0 </h1>
+        </div>
+    </div>
+
+    <div id="container-center">
+        <h1 id="operand1">0</h1>&nbsp;&nbsp;
+        <h1 id="operation">x</h1>
+        &nbsp;&nbsp;<h1 id="operand2">0</h1>
+        &nbsp;&nbsp;<h1 id="">=</h1>&nbsp;&nbsp;
+        <input type="number" id="ans" name="Answer">
+    </div>
+    <br>
+    <div id="container-center">
+        <button id="start" style="margin: 5px">เริ่ม</button>
+        <button id="submit" style="margin: 5px">ส่งคำตอบ</button>
+    </div>
+</body>
+
+<script>
+
+    const operations = ["+", "-", "*", "/"];
+
+    let count = 0;
+    let round = 0;
+
+    let answer = 0;
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function start() {
+
+        if (round == 0) {
+            generateQuestion();
+        } else if (round >= 1) {
+            console.log(round);
+            generateQuestion();
+            reset();
+        }
+    }
+
+    function generateQuestion() {
+        const operand1 = getRandomInt(0, 10);
+        const operand2 = getRandomInt(0, 10);
+        const operationIndex = getRandomInt(0, operations.length - 1);
+        const operation = operations[operationIndex];
+
+        document.getElementById('operand1').innerHTML = operand1;
+        document.getElementById('operand2').innerHTML = operand2;
+        document.getElementById('operation').innerHTML = operation;
+
+    }
+
+    function reset() {
+        count = 0;
+        round = 0;
+        document.getElementById('count').innerHTML = count;
+        document.getElementById('round').innerHTML = round;
+    }
+
+    function checkAnswer() {
+        const operand1 = parseInt(document.getElementById('operand1').innerHTML);
+        const operand2 = parseInt(document.getElementById('operand2').innerHTML);
+        const operation = document.getElementById('operation').innerHTML;
+        const ans = parseInt(document.getElementById('ans').value);
+
+        if (operation == "+") {
+            answer = operand1 + operand2;
+        } else if (operation == "-") {
+            answer = operand1 - operand2;
+        } else if (operation == "*") {
+            answer = operand1 * operand2;
+        } else if (operation == "/") {
+            answer = operand1 / operand2;
+        }
+
+        if (ans == answer) {
+            count++;
+            round++;
+            document.getElementById('count').innerHTML = count;
+            document.getElementById('round').innerHTML = round;
+            document.getElementById('ans').value = "";
+            generateQuestion();
+        } else {
+            round++;
+            document.getElementById('round').innerHTML = round;
+            document.getElementById('ans').value = "";
+            generateQuestion();
+        }
+    }
+
+
+
+    document.getElementById('start').addEventListener('click', start);
+    document.getElementById('submit').addEventListener('click', checkAnswer);
+
+</script>
+
+</html>
